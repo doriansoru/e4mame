@@ -48,4 +48,4 @@ For any question please feel free to [contact me](mailto:doriansoru@gmail.com).
 
 ## License
 
-This project is licensed under the GNU General Public License Version 3 - see the LICENSE.md file for details.
+This project is licensed under the GNU General Public License Version 3 - see the LICENSE file for details.
