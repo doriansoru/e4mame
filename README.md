@@ -3,8 +3,9 @@
 This is a simple MAME Frontend written in Python.
 
 ## Description
-
 I needed a minimalistic MAME Frontend and, after searching for a while, I decided to write this one in Python.
+
+![Screenshot of the program](https://github.com/doriansoru/e4mame/assets/96388235/6ec1813f-fd75-47d0-80a6-325104e6d10f)
 
 ## Getting Started
 
