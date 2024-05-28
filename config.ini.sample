@@ -1,0 +1,7 @@
+[global]
+; your rom files directory full path
+rom_path = 
+; your snap file. it must be a zip file
+snap_file = 
+; the full path of your mame executable
+mame_executable = /usr/bin/mame

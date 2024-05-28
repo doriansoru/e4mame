@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 14:56+0200\n"
+"PO-Revision-Date: 2024-05-28 14:57+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: e4mame.py:32
+msgid "E4 MAME Frontend"
+msgstr "E4 MAME Frontend"
+
+#: e4mame.py:36
+msgid "Add to favorites"
+msgstr "Aggiungi ai preferiti"
+
+#: e4mame.py:37
+msgid "Remove from favorites"
+msgstr "Rimuovi dai preferiti"
+
+#: e4mame.py:38
+msgid "Launch"
+msgstr "Avvia"
+
+#: e4mame.py:39
+msgid "Type to search"
+msgstr "Digita per cercare"
+
+#: e4mame.py:40
+msgid "All games"
+msgstr "Tutti i giochi"
+
+#: e4mame.py:41
+msgid "Favorites"
+msgstr "Preferiti"
+
+#: e4mame.py:42
+msgid "Quit"
+msgstr "Esci"
+
+#: e4mame.py:85
+msgid "Double click to launch the game, right click for more options"
+msgstr "Doppio click per avviare il gioco, click destro per altre opzioni"
+
+#: e4mame.py:324
+msgid "Snapshot not available"
+msgstr "Schermata non disponibile"
+
+#: e4mame.py:390
+msgid "Getting all your roms list..."
+msgstr "Ottengo la lista di tutti i tuoi rom..."
+
+#: e4mame.py:417
+msgid "Checking for"
+msgstr "Controllo per"
+
+#: e4mame.py:436
+msgid "Saving everything in"
+msgstr "Salvo tutto in"
+
+#: e4mame.py:494
+msgid "A minimalistic MAME Frontend"
+msgstr "Un frontend per MAME minimalistico"
+
+#: e4mame.py:496
+msgid "Released under the GPL-3.0 Licence"
+msgstr "Rilasciato sotto licenza GPL-3.0"
+
+#: e4mame.py:517
+msgid "The games file does not exist. I will now create it."
+msgstr "Il file dei giochi non esiste. Lo creerò adesso."
+
+#: e4mame.py:518
+msgid "Please confirm that your zip snap file is:"
+msgstr "Per favore conferma che il file zip delle schermate è:"
+
+#: e4mame.py:519
+msgid "Please confirm that your mame executable is:"
+msgstr "Per favore conferma che l'eseguibile mame è:"
+
+#: e4mame.py:520
+msgid "Y"
+msgstr "S"
+
+#: e4mame.py:520 e4mame.py:521
+msgid "N"
+msgstr "N"
+
+#: e4mame.py:522
+msgid "Please correct"
+msgstr "Per favore correggi"
+
+#: e4mame.py:530
+msgid "All files have been update. Please restart the program"
+msgstr "Tutti i file sono stati aggiornati. Per favore riavvia il programma"
+
+#: e4mame.py:579
+msgid "About"
+msgstr "Informazioni su"
+
+#~ msgid "Build games list"
+#~ msgstr "Costruisci lista dei giochi"
+
+#~ msgid "Show usage"
+#~ msgstr "Mostra utilizzo"
