@@ -46,17 +46,17 @@ FLD_DESCRIPTION = 'description'
 class E4Mame:
 	"""
 	Class that handles the graphical interface of the MAME frontend.
-    """
+	"""
 	def __init__(self, window, source, search=True, show_favorites=False):
 		"""
 		Initialize the E4Mame class.
 
-        :param window: The main window of the application.
-        :param source: The path to the JSON file that contains the games list.
-        :param search: Boolean that indicates if the search bar should be displayed.
-        :param show_favorites: Boolean that indicates if the favorites games should be displayed.
-        """
-        		
+		:param window: The main window of the application.
+		:param source: The path to the JSON file that contains the games list.
+		:param search: Boolean that indicates if the search bar should be displayed.
+		:param show_favorites: Boolean that indicates if the favorites games should be displayed.
+		"""
+				
 		self.window = window
 		self.window.bind("<Configure>", self.on_window_resize)
 
@@ -150,8 +150,8 @@ class E4Mame:
 
 	def load_favorites(self):
 		"""
-        Load the favorites games from the JSON file.
-        """		
+		Load the favorites games from the JSON file.
+		"""		
 		try:
 			with open(self.config['favorites_file'], "r") as f:
 				favorites = json.load(f)
@@ -161,8 +161,8 @@ class E4Mame:
 
 	def save_favorites(self):
 		"""
-        Save the favorites games to the JSON file.
-        """		
+		Save the favorites games to the JSON file.
+		"""		
 		# Saves the favorites
 		with open(self.config['favorites_file'], "w") as f:
 			json.dump(self.favorites, f)
@@ -175,20 +175,20 @@ class E4Mame:
 
 	def add_favorite(self, selected_game):
 		"""
-        Add a game to the favorites.
+		Add a game to the favorites.
 
-        :param selected_game: The name of the game to add to the favorites.
-        """		
+		:param selected_game: The name of the game to add to the favorites.
+		"""		
 		# Adds the selected game to the favorites
 		self.favorites[selected_game] = self.games[selected_game]
 		self.save_favorites()
 
 	def remove_favorite(self, selected_game):
 		"""
-        Remove a game from the favorites.
+		Remove a game from the favorites.
 
-        :param selected_game: The name of the game to remove from the favorites.
-        """		
+		:param selected_game: The name of the game to remove from the favorites.
+		"""		
 		# Removes the selected game from the favorites
 		if selected_game in self.favorites:
 			del self.favorites[selected_game]
@@ -198,10 +198,10 @@ class E4Mame:
 
 	def on_key_press(self, letter):
 		"""
-        Handle the key press event in the games list.
+		Handle the key press event in the games list.
 
-        :param letter: The letter that was pressed.
-        """		
+		:param letter: The letter that was pressed.
+		"""		
 		if letter.isalpha():
 			for idx in range(self.game_list.size()):
 				game_name = self.game_list.get(idx)
@@ -216,8 +216,8 @@ class E4Mame:
 
 	def search_games(self, *args):
 		"""
-        Search the games list and display the results.
-        """		
+		Search the games list and display the results.
+		"""		
 		# Clears the game list
 		self.game_list.delete(0, tk.END)
 
@@ -235,8 +235,8 @@ class E4Mame:
 
 	def select_first_game(self):
 		"""
-        Select the first game in the games list.
-        """		
+		Select the first game in the games list.
+		"""		
 		# Selects the first game
 		self.game_list.selection_clear(0, tk.END)
 		self.game_list.activate(0)
@@ -245,20 +245,20 @@ class E4Mame:
 
 	def on_tab_select(self, event):
 		"""
-        Handle the tab select event.
+		Handle the tab select event.
 
-        :param event: The event object.
-        """		
+		:param event: The event object.
+		"""		
 		# Selects the first game if no game is selected
 		if len(self.game_list.curselection()) == 0:
 			self.select_first_game()
 			
 	def on_window_resize(self, event=None):
 		"""
-        Handle the window resize event.
+		Handle the window resize event.
 
-        :param event: The event object.
-        """
+		:param event: The event object.
+		"""
 		if self.game_image is None:
 			return
 
@@ -279,10 +279,10 @@ class E4Mame:
 
 	def on_game_select(self, event):
 		"""
-        Handle the game select event.
+		Handle the game select event.
 
-        :param event: The event object.
-        """		
+		:param event: The event object.
+		"""		
 		if len(self.games) == 0:
 			return
 		# Checks if a game is selected
@@ -302,10 +302,10 @@ class E4Mame:
 
 	def load_game_image(self, selected_game):
 		"""
-        Load the game image and display it.
+		Load the game image and display it.
 
-        :param selected_game: The name of the game.
-        """		
+		:param selected_game: The name of the game.
+		"""		
 		# Updates the image of the selected game
 		if self.games[selected_game]["snapshot"]:
 			# Loads the image of the selected game
@@ -329,10 +329,10 @@ class E4Mame:
 
 	def launch_game(self, event = None):
 		"""
-        Launch the selected game.
+		Launch the selected game.
 
-        :param event: The event object.
-        """		
+		:param event: The event object.
+		"""		
 		# Gets the selected game
 		selected_game_description = self.game_list.get(tk.ACTIVE)
 		selected_game = next(
@@ -344,8 +344,8 @@ class E4Mame:
 
 	def load_games(self):
 		"""
-        Load the games list from the JSON file.
-        """		
+		Load the games list from the JSON file.
+		"""		
 		# Clears the game list
 		self.game_list.delete(0, tk.END)
 
@@ -360,10 +360,10 @@ class E4Mame:
 
 	def popup(self, event):
 		"""
-        Handle the right-click event in the games list and display a popup menu.
+		Handle the right-click event in the games list and display a popup menu.
 
-        :param event: The event object.
-        """		
+		:param event: The event object.
+		"""		
 		# Modify the second voice of the menu
 		selected_game_description = self.game_list.get(tk.ACTIVE)
 		selected_game = next(
@@ -380,10 +380,10 @@ class E4Mame:
 
 def build_games(custom_xml = None):
 	"""
-    Build the working game list.
+	Build the working game list.
 
-    :param custom_xml: A custom xml file instead of that one returned by mame -listxml.
-    """		
+	:param custom_xml: A custom xml file instead of that one returned by mame -listxml.
+	"""		
 
 	config = get_config(False)
 	
@@ -441,8 +441,8 @@ def get_config(read_from_config_dir = False):
 	"""
 	Get the configuration variables.
 
-    :param read_from_config_dir: If True, read the config.ini file from user_config_dir(APP_NAME), otherwise from the script directory.
-    """		
+	:param read_from_config_dir: If True, read the config.ini file from user_config_dir(APP_NAME), otherwise from the script directory.
+	"""		
 
 	APP_NAME = 'e4mame'
 	CONFIG_FILE = 'config.ini'
@@ -470,7 +470,7 @@ def get_config(read_from_config_dir = False):
 def copy_config_files():
 	"""
 	Copy the configuration files to user_config_dir(APP_NAME).
-    """		
+	"""		
 
 	config = get_config(False)
 	# Copy the config file
@@ -484,7 +484,7 @@ def copy_config_files():
 def get_about_notebook():
 	"""
 	Build and return the about notebook tab.
-    """	
+	"""	
 
 	# Adds an "About" notebook
 	pad1 = 30
