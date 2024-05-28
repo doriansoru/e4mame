@@ -1,6 +1,6 @@
 # E4 Mame Frontend
 
-This is a simple MAME Frontend written in python.
+This is a simple MAME Frontend written in Python.
 
 ## Description
 
