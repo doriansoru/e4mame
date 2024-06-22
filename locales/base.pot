@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 08:58+0200\n"
+"POT-Creation-Date: 2024-06-22 09:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,102 +17,106 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: e4mame.py:32
+#: e4mame.py:33
 msgid "E4 MAME Frontend"
 msgstr ""
 
-#: e4mame.py:36
+#: e4mame.py:37
 msgid "Add to favorites"
 msgstr ""
 
-#: e4mame.py:37
+#: e4mame.py:38
 msgid "Remove from favorites"
 msgstr ""
 
-#: e4mame.py:38
+#: e4mame.py:39
 msgid "Launch"
 msgstr ""
 
-#: e4mame.py:39
+#: e4mame.py:40
 msgid "Type to search"
 msgstr ""
 
-#: e4mame.py:40
+#: e4mame.py:41
 msgid "All games"
 msgstr ""
 
-#: e4mame.py:41
+#: e4mame.py:42
 msgid "Favorites"
 msgstr ""
 
-#: e4mame.py:42
+#: e4mame.py:43
 msgid "Quit"
 msgstr ""
 
-#: e4mame.py:85
+#: e4mame.py:86
 msgid "Double click to launch the game, right click for more options"
 msgstr ""
 
-#: e4mame.py:324
+#: e4mame.py:325
 msgid "Snapshot not available"
 msgstr ""
 
-#: e4mame.py:345
+#: e4mame.py:346
 msgid "An error occurred while running the game:"
 msgstr ""
 
 #: e4mame.py:346
+msgid "The error message has been copied in the clipboard"
+msgstr ""
+
+#: e4mame.py:348
 msgid "Error"
 msgstr ""
 
-#: e4mame.py:393
+#: e4mame.py:395
 msgid "Getting all your roms list..."
 msgstr ""
 
-#: e4mame.py:420
+#: e4mame.py:422
 msgid "Checking for"
 msgstr ""
 
-#: e4mame.py:439
+#: e4mame.py:441
 msgid "Saving everything in"
 msgstr ""
 
-#: e4mame.py:497
+#: e4mame.py:499
 msgid "A minimalistic MAME Frontend"
 msgstr ""
 
-#: e4mame.py:499
+#: e4mame.py:501
 msgid "Released under the GPL-3.0 Licence"
 msgstr ""
 
-#: e4mame.py:520
+#: e4mame.py:522
 msgid "The games file does not exist. I will now create it."
 msgstr ""
 
-#: e4mame.py:521
+#: e4mame.py:523
 msgid "Please confirm that your zip snap file is:"
 msgstr ""
 
-#: e4mame.py:522
+#: e4mame.py:524
 msgid "Please confirm that your mame executable is:"
 msgstr ""
 
-#: e4mame.py:523
+#: e4mame.py:525
 msgid "Y"
 msgstr ""
 
-#: e4mame.py:523 e4mame.py:524
+#: e4mame.py:525 e4mame.py:526
 msgid "N"
 msgstr ""
 
-#: e4mame.py:525
+#: e4mame.py:527
 msgid "Please correct"
 msgstr ""
 
-#: e4mame.py:533
+#: e4mame.py:535
 msgid "All files have been update. Please restart the program"
 msgstr ""
 
-#: e4mame.py:582
+#: e4mame.py:584
 msgid "About"
 msgstr ""
