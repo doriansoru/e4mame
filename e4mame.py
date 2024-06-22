@@ -342,7 +342,7 @@ class E4Mame:
 
 		# Launches the selected game with MAME
 		result = subprocess.run([self.config['mame_executable'], selected_game], capture_output = True)
-		if result.stderr is not None:
+		if result.stderr.decode() != "":
 			error_message = _("An error occurred while running the game:") + f"\n\n{result.stderr.decode()}" + "\n\n" + _("The error message has been copied in the clipboard")
 			pyperclip.copy(result.stderr.decode())
 			messagebox.showerror(_("Error"), error_message)
