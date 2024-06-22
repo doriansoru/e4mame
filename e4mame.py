@@ -1,19 +1,20 @@
 import argparse
 import configparser
+import gettext
+import io
 import json
+import locale
 import os
-from PIL import Image, ImageTk
-from platformdirs import *
 import shutil
 import subprocess
+import sys
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk, font
 import xml.etree.ElementTree as ET
-import gettext
-import locale
 import zipfile
-import io
+from PIL import Image, ImageTk
+from platformdirs import user_config_dir
 import pyperclip
 
 # Sets the default locale
@@ -57,14 +58,14 @@ class E4Mame:
 		:param search: Boolean that indicates if the search bar should be displayed.
 		:param show_favorites: Boolean that indicates if the favorites games should be displayed.
 		"""
-				
+
 		self.window = window
 		self.window.bind("<Configure>", self.on_window_resize)
 
 		self.source = source
 		self.search = search
 		self.show_favorites = show_favorites
-		self.PAD = 20
+		self.pad = 20
 
 		self.config = get_config(True)
 		# Copy the config file
@@ -83,8 +84,11 @@ class E4Mame:
 		self.info_frame.pack(side=tk.TOP, fill=tk.X)
 
 		# Creates a label at the beginning
-		self.info_label = tk.Label(self.info_frame, text=_("Double click to launch the game, right click for more options"), font=font.Font(size = 18))
-		self.info_label.pack(side=tk.TOP, fill=tk.X, padx=(self.PAD, self.PAD), pady=(self.PAD, self.PAD))
+		self.info_label = tk.Label(self.info_frame, 
+			text=_("Double click to launch the game, right click for more options"), 
+			font=font.Font(size = 18))
+		
+		self.info_label.pack(side=tk.TOP, fill=tk.X, padx=(self.pad, self.pad), pady=(self.pad, self.pad))
 
 		# Creates a game list
 		self.game_list = tk.Listbox(self.game_list_frame, font=font.Font(size=12))
@@ -107,7 +111,7 @@ class E4Mame:
 		self.game_list.config(yscrollcommand=scrollbar.set)
 
 		# Modify the listbox to let space for the scrollbar
-		self.game_list.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=(self.PAD, self.PAD))
+		self.game_list.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=(self.pad, self.pad))
 
 		# Creates a frame for the favorite button and search bar
 		self.search_fav_frame = tk.Frame(self.game_list_frame)
@@ -119,9 +123,13 @@ class E4Mame:
 			self.search_var.trace('w', self.search_games)
 			self.search_entry = tk.Entry(self.search_fav_frame,
 										   textvariable=self.search_var)
-			self.search_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(self.PAD, self.PAD), pady=(self.PAD, self.PAD))
+			self.search_entry.pack(side=tk.LEFT, 
+				fill=tk.X, 
+				expand=True, 
+				padx=(self.pad, self.pad), 
+				pady=(self.pad, self.pad))
 			self.search_label = tk.Label(self.search_fav_frame, text = LBL_SEARCH, font=font.Font(size = 13))
-			self.search_label.pack(side=tk.LEFT, padx=(self.PAD, self.PAD), pady=(self.PAD, self.PAD))
+			self.search_label.pack(side=tk.LEFT, padx=(self.pad, self.pad), pady=(self.pad, self.pad))
 
 		if not os.path.exists(self.source):
 			self.games = {}
@@ -137,7 +145,11 @@ class E4Mame:
 
 		# Creates a frame for the game image
 		self.game_image_frame = ttk.Frame(self.window)
-		self.game_image_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=(self.PAD, self.PAD), pady=(self.PAD,self.PAD))
+		self.game_image_frame.pack(side=tk.TOP, 
+			fill=tk.BOTH, 
+			expand=True, 
+			padx=(self.pad, self.pad), 
+			pady=(self.pad,self.pad))
 
 		# Creates a label for the game image
 		self.game_image_label = tk.Label(self.game_image_frame)
@@ -212,7 +224,7 @@ class E4Mame:
 					self.game_list.selection_set(idx)
 					self.on_game_select(None)
 					break
-		elif letter == '\r' or letter == '\n':
+		elif letter in ('\r', '\n'):
 			self.launch_game()
 
 	def search_games(self, *args):
@@ -341,9 +353,11 @@ class E4Mame:
 			if self.games[game][FLD_DESCRIPTION] == selected_game_description)
 
 		# Launches the selected game with MAME
-		result = subprocess.run([self.config['mame_executable'], selected_game], capture_output = True)
+		result = subprocess.run([self.config['mame_executable'], selected_game], capture_output = True, check = False)
 		if result.stderr.decode() != "":
-			error_message = _("An error occurred while running the game:") + f"\n\n{result.stderr.decode()}" + "\n\n" + _("The error message has been copied in the clipboard")
+			error_message = _("An error occurred while running the game:") \
+				+ f"\n\n{result.stderr.decode()}" \
+				+ "\n\n" + _("The error message has been copied in the clipboard")
 			pyperclip.copy(result.stderr.decode())
 			messagebox.showerror(_("Error"), error_message)
 
@@ -395,7 +409,7 @@ def build_games(custom_xml = None):
 	print(_('Getting all your roms list...'))
 	if custom_xml is None:
 		command = f"{config['mame_executable']} -listxml"
-		process = subprocess.run(command, stdout=subprocess.PIPE, shell=True, text=True)
+		process = subprocess.run(command, stdout=subprocess.PIPE, shell=True, text=True, check=False)
 		xml_string = process.stdout
 	else:
 		with open(custom_xml, 'r') as f:
@@ -403,7 +417,11 @@ def build_games(custom_xml = None):
 
 	root = ET.fromstring(xml_string)
 	machines = root.findall('machine')
-	roms = [ machine.attrib['name'] for machine in machines if machine.attrib['isbios'] == 'no' and machine.find('.//driver') is not None and machine.find('.//driver').attrib['status'] == 'good' ]
+	roms = [ machine.attrib['name'] 
+		for machine in machines 
+		if machine.attrib['isbios'] == 'no' 
+		and machine.find('.//driver') is not None 
+		and machine.find('.//driver').attrib['status'] == 'good' ]
 
 	# Remove empty strings from the list
 	games_list = [game for game in roms if game]
@@ -432,10 +450,7 @@ def build_games(custom_xml = None):
 		for machine in root.findall(f'.//machine[@name="{game}"]'):
 			description = machine.find(FLD_DESCRIPTION).text
 
-		if snap_name in snaps_list:
-			snapshot = True
-		else:
-			snapshot = False
+		snapshot = snap_name in snaps_list
 		games[game] = {FLD_DESCRIPTION: description, 'snapshot': snapshot}
 		i += 1
 	print(_("Saving everything in") + " " + config['games_file'])
@@ -446,25 +461,26 @@ def get_config(read_from_config_dir = False):
 	"""
 	Get the configuration variables.
 
-	:param read_from_config_dir: If True, read the config.ini file from user_config_dir(APP_NAME), otherwise from the script directory.
+	:param read_from_config_dir: If True, read the config.ini file
+	       from user_config_dir(app_name), otherwise from the script directory.
 	"""		
 
-	APP_NAME = 'e4mame'
-	CONFIG_FILE = 'config.ini'
-	GAMES_FILE = 'games.json'
-	FAVORITES_FILE = 'favorites.json'
-	config_dir = user_config_dir(APP_NAME)
+	app_name = 'e4mame'
+	config_file = 'config.ini'
+	games_file = 'games.json'
+	favorites_file = 'favorites.json'
+	config_dir = user_config_dir(app_name)
 
 	config = configparser.ConfigParser()
-	config.read(CONFIG_FILE)
+	config.read(config_file)
 	rom_path = config['global']['rom_path']
 	snap_file = config['global']['snap_file']
 	mame_executable = config["global"]["mame_executable"]
 
 	config = { 
-		'config_file': CONFIG_FILE,
-		'games_file': os.path.join(config_dir, GAMES_FILE) if read_from_config_dir else GAMES_FILE,
-		'favorites_file': os.path.join(config_dir, FAVORITES_FILE) if read_from_config_dir else FAVORITES_FILE,
+		'config_file': config_file,
+		'games_file': os.path.join(config_dir, games_file) if read_from_config_dir else games_file,
+		'favorites_file': os.path.join(config_dir, favorites_file) if read_from_config_dir else favorites_file,
 		'config_dir': config_dir,
 		'rom_path': rom_path,
 		'snap_file': snap_file,
@@ -474,7 +490,7 @@ def get_config(read_from_config_dir = False):
 
 def copy_config_files():
 	"""
-	Copy the configuration files to user_config_dir(APP_NAME).
+	Copy the configuration files to user_config_dir(app_name).
 	"""		
 
 	config = get_config(False)
@@ -482,8 +498,8 @@ def copy_config_files():
 	if not os.path.isdir(config['config_dir']):
 		# Create the directory
 		os.makedirs(config['config_dir'], exist_ok=True)
-		shutil.copy(config['config_file'], self.config_dir)
-		shutil.copy(config['games_file'], self.config_dir)
+		shutil.copy(config['config_file'], config['config_file'])
+		shutil.copy(config['games_file'], config['config_file'])
 
 
 def get_about_notebook():
@@ -496,9 +512,15 @@ def get_about_notebook():
 	pad2 = 20
 	about_notebook = ttk.Frame(notebook)
 	label_app_name = ttk.Label(about_notebook, text = APP_TITLE, font = font.Font(size = 25))
-	label_app_description = ttk.Label(about_notebook, text = _('A minimalistic MAME Frontend'), font = font.Font(size = 16))
-	label_app_author = ttk.Label(about_notebook, text = 'by Dorian Soru, doriansoru@gmail.com', font = font.Font(size = 14))
-	label_license = ttk.Label(about_notebook, text =_('Released under the GPL-3.0 Licence'), font = font.Font(size = 14))
+	label_app_description = ttk.Label(about_notebook, 
+		text = _('A minimalistic MAME Frontend'), 
+		font = font.Font(size = 16))
+	label_app_author = ttk.Label(about_notebook, 
+		text = 'by Dorian Soru, doriansoru@gmail.com', 
+		font = font.Font(size = 14))
+	label_license = ttk.Label(about_notebook, 
+		text =_('Released under the GPL-3.0 Licence'), 
+		font = font.Font(size = 14))
 
 	# Add the elements
 	label_app_name.pack(fill=tk.X, pady = (0, pad1))
@@ -517,7 +539,7 @@ if __name__ == "__main__":
 	# Get the config file from the current directory
 	config = get_config(False)
 
-	# Check if GAMES_FILE exists or creates it
+	# Check if games_file exists or creates it
 	if not os.path.isfile(config['games_file']):
 		print(_("The games file does not exist. I will now create it."))
 		print(_("Please confirm that your zip snap file is:") + " " + config['snap_file'])
@@ -525,7 +547,7 @@ if __name__ == "__main__":
 		confirm = input(_('Y') + ' / ' + _('N') + ': ').lower()
 		if confirm == _('N').lower():
 			print(_('Please correct') + ' ' + config['config_file'])
-			exit()
+			sys.exit()
 		else:
 			if args.xml is not None:
 				build_games(args.xml)
@@ -533,9 +555,10 @@ if __name__ == "__main__":
 				build_games()
 			copy_config_files()
 			print(_('All files have been update. Please restart the program'))
-			exit()
+			sys.exit()
 	
-	# Now user_config_dir(APP_NAME) has been created and the config files have been copied. Re-read them from there
+	# Now user_config_dir(app_name) has been created and
+	# the config files have been copied. Re-read them from there
 	config = get_config(True)
 
 	# Appropriate actions for the various arguments
