@@ -5,10 +5,12 @@ import io
 import json
 import locale
 import os
+import pathlib
 import shutil
 import subprocess
 import sys
 import tkinter as tk
+import tkinter.constants as tkconst
 from tkinter import messagebox
 from tkinter import ttk, font
 import xml.etree.ElementTree as ET
@@ -240,8 +242,7 @@ class E4Mame:
 		:param letter: The letter that was pressed.
 		"""
 		if letter.isalpha():
-			for idx in range(self.game_list.size()):
-				game_name = self.game_list.get(idx)
+			for idx, game_name in enumerate(self.game_list.get(0, tkconst.END)):
 				if game_name.lower().startswith(letter.lower()):
 					self.game_list.see(idx)
 					self.game_list.selection_clear(0, tk.END)
@@ -464,11 +465,11 @@ def build_games(config, custom_xml=None):
 
 	print(_("Getting all your roms list..."))
 	if custom_xml is None:
-		command = f"{config['mame_executable']} -listxml"
+		command = [config['mame_executable'], "-listxml"]
 		process = subprocess.run(
-			command, stdout=subprocess.PIPE, shell=True, text=True, check=False
+			command, stdout=subprocess.PIPE, check=False
 		)
-		xml_string = process.stdout
+		xml_string = process.stdout.decode()
 	else:
 		with open(custom_xml, "r") as f:
 			xml_string = f.read()
@@ -503,8 +504,8 @@ def build_games(config, custom_xml=None):
 	for game in games_list:
 		print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
 		snap_name = f"{game}.png"
-		command = f"{config['mame_executable']} -lx {game}"
-		process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+		command = [config['mame_executable'], "-lx", game]
+		process = subprocess.Popen(command, stdout=subprocess.PIPE)
 		output, error = process.communicate()
 
 		# L'output sarà in bytes, quindi lo convertiamo in una stringa
@@ -535,6 +536,7 @@ def get_config(read_from_config_dir=False):
 	games_file = "games.json"
 	favorites_file = "favorites.json"
 	config_dir = user_config_dir(app_name)
+	config_dir_path = pathlib.Path(config_dir)
 
 	config = configparser.ConfigParser()
 	config.read(config_file)
@@ -542,14 +544,9 @@ def get_config(read_from_config_dir=False):
 	snap_file = config["global"]["snap_file"]
 	mame_executable = config["global"]["mame_executable"]
 
-	config = {
-		"config_file": config_file,
-		"games_file": os.path.join(config_dir, games_file)
-		if read_from_config_dir
-		else games_file,
-		"favorites_file": os.path.join(config_dir, favorites_file)
-		if read_from_config_dir
-		else favorites_file,
+	config = {"config_file": config_file, 
+		"games_file": (config_dir_path / games_file) if read_from_config_dir else games_file,
+		"favorites_file": (config_dir_path / favorites_file) if read_from_config_dir else favorites_file,
 		"config_dir": config_dir,
 		"rom_path": rom_path,
 		"snap_file": snap_file,
@@ -568,8 +565,8 @@ def copy_config_files():
 	if not os.path.isdir(config["config_dir"]):
 		# Create the directory
 		os.makedirs(config["config_dir"], exist_ok=True)
-		shutil.copy(config["config_file"], config["config_file"])
-		shutil.copy(config["games_file"], config["config_file"])
+		shutil.copy(config["config_file"], config["config_dir"])
+		shutil.copy(config["games_file"], config["config_dir"])
 
 
 def get_about_notebook():
