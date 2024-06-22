@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: E4Mame\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 14:56+0200\n"
-"PO-Revision-Date: 2024-05-28 14:57+0200\n"
+"POT-Creation-Date: 2024-06-22 08:58+0200\n"
+"PO-Revision-Date: 2024-06-22 09:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it\n"
@@ -57,55 +57,63 @@ msgstr "Doppio click per avviare il gioco, click destro per altre opzioni"
 msgid "Snapshot not available"
 msgstr "Schermata non disponibile"
 
-#: e4mame.py:390
+#: e4mame.py:345
+msgid "An error occurred while running the game:"
+msgstr "C'è stato un errore durante l'esecuzione del gioco:"
+
+#: e4mame.py:346
+msgid "Error"
+msgstr "Errore"
+
+#: e4mame.py:393
 msgid "Getting all your roms list..."
 msgstr "Ottengo la lista di tutti i tuoi rom..."
 
-#: e4mame.py:417
+#: e4mame.py:420
 msgid "Checking for"
 msgstr "Controllo per"
 
-#: e4mame.py:436
+#: e4mame.py:439
 msgid "Saving everything in"
 msgstr "Salvo tutto in"
 
-#: e4mame.py:494
+#: e4mame.py:497
 msgid "A minimalistic MAME Frontend"
 msgstr "Un frontend per MAME minimalistico"
 
-#: e4mame.py:496
+#: e4mame.py:499
 msgid "Released under the GPL-3.0 Licence"
 msgstr "Rilasciato sotto licenza GPL-3.0"
 
-#: e4mame.py:517
+#: e4mame.py:520
 msgid "The games file does not exist. I will now create it."
 msgstr "Il file dei giochi non esiste. Lo creerò adesso."
 
-#: e4mame.py:518
+#: e4mame.py:521
 msgid "Please confirm that your zip snap file is:"
 msgstr "Per favore conferma che il file zip delle schermate è:"
 
-#: e4mame.py:519
+#: e4mame.py:522
 msgid "Please confirm that your mame executable is:"
 msgstr "Per favore conferma che l'eseguibile mame è:"
 
-#: e4mame.py:520
+#: e4mame.py:523
 msgid "Y"
 msgstr "S"
 
-#: e4mame.py:520 e4mame.py:521
+#: e4mame.py:523 e4mame.py:524
 msgid "N"
 msgstr "N"
 
-#: e4mame.py:522
+#: e4mame.py:525
 msgid "Please correct"
 msgstr "Per favore correggi"
 
-#: e4mame.py:530
+#: e4mame.py:533
 msgid "All files have been update. Please restart the program"
 msgstr "Tutti i file sono stati aggiornati. Per favore riavvia il programma"
 
-#: e4mame.py:579
+#: e4mame.py:582
 msgid "About"
 msgstr "Informazioni su"
 

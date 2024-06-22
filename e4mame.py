@@ -340,7 +340,10 @@ class E4Mame:
 			if self.games[game][FLD_DESCRIPTION] == selected_game_description)
 
 		# Launches the selected game with MAME
-		subprocess.run([self.config['mame_executable'], selected_game], check=True)
+		result = subprocess.run([self.config['mame_executable'], selected_game], capture_output = True)
+		if result.stderr is not None:
+			error_message = _("An error occurred while running the game:") + f"\n\n{result.stderr.decode()}"
+			messagebox.showerror(_("Error"), error_message)
 
 	def load_games(self):
 		"""
