@@ -27,7 +27,7 @@ from the program directory.
 * Open a shell
 * Go to the script directory
 * Type:
-```python3 e4mame.py```
+```python3 main.py```
 
 The first time it runs, it will create games.json, the list of all working games, by analysing the result of `mame -listxml`. You can also provide your custom xml roms list by using `--xml` argument.
 You can rebuild the games list by using the `--games` argument, than you need to copy games.json in your config directory (in unix systems it is usually `~/.config/e4mame`)-
@@ -36,7 +36,7 @@ You can rebuild the games list by using the `--games` argument, than you need to
 
 For getting help type:
 ```
-python3 e4mame.py -h
+python3 main.py -h
 ```
 
 ## Authors
