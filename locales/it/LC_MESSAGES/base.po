@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: E4Mame\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 09:13+0200\n"
-"PO-Revision-Date: 2024-06-22 09:14+0200\n"
+"POT-Creation-Date: 2024-06-23 09:19+0200\n"
+"PO-Revision-Date: 2024-06-23 09:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it\n"
@@ -17,107 +17,107 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: e4mame.py:33
-msgid "E4 MAME Frontend"
-msgstr "E4 MAME Frontend"
-
-#: e4mame.py:37
-msgid "Add to favorites"
-msgstr "Aggiungi ai preferiti"
-
-#: e4mame.py:38
-msgid "Remove from favorites"
-msgstr "Rimuovi dai preferiti"
-
-#: e4mame.py:39
-msgid "Launch"
-msgstr "Avvia"
-
-#: e4mame.py:40
-msgid "Type to search"
-msgstr "Digita per cercare"
-
-#: e4mame.py:41
-msgid "All games"
-msgstr "Tutti i giochi"
-
-#: e4mame.py:42
-msgid "Favorites"
-msgstr "Preferiti"
-
-#: e4mame.py:43
-msgid "Quit"
-msgstr "Esci"
-
-#: e4mame.py:86
-msgid "Double click to launch the game, right click for more options"
-msgstr "Doppio click per avviare il gioco, click destro per altre opzioni"
-
-#: e4mame.py:325
-msgid "Snapshot not available"
-msgstr "Schermata non disponibile"
-
-#: e4mame.py:346
-msgid "An error occurred while running the game:"
-msgstr "C'è stato un errore durante l'esecuzione del gioco:"
-
-#: e4mame.py:346
-msgid "The error message has been copied in the clipboard"
-msgstr "Questo messaggio di errore è stato copiato negli appunti"
-
-#: e4mame.py:348
-msgid "Error"
-msgstr "Errore"
-
-#: e4mame.py:395
+#: config.py:76
 msgid "Getting all your roms list..."
 msgstr "Ottengo la lista di tutti i tuoi rom..."
 
-#: e4mame.py:422
+#: config.py:90 e4mame.py:198
+msgid "Error"
+msgstr "Errore"
+
+#: config.py:115
 msgid "Checking for"
 msgstr "Controllo per"
 
-#: e4mame.py:441
+#: config.py:131
 msgid "Saving everything in"
 msgstr "Salvo tutto in"
 
-#: e4mame.py:499
+#: const.py:2 main.py:10
+msgid "E4 MAME Frontend"
+msgstr "E4 MAME Frontend"
+
+#: const.py:6 main.py:14
+msgid "Add to favorites"
+msgstr "Aggiungi ai preferiti"
+
+#: const.py:7 main.py:15
+msgid "Remove from favorites"
+msgstr "Rimuovi dai preferiti"
+
+#: const.py:8 main.py:16
+msgid "Launch"
+msgstr "Avvia"
+
+#: const.py:9 main.py:17
+msgid "Type to search"
+msgstr "Digita per cercare"
+
+#: const.py:10 main.py:18
+msgid "All games"
+msgstr "Tutti i giochi"
+
+#: const.py:11 main.py:19
+msgid "Favorites"
+msgstr "Preferiti"
+
+#: const.py:12 main.py:20
+msgid "Quit"
+msgstr "Esci"
+
+#: e4mame.py:58
+msgid "Double click to launch the game, right click for more options"
+msgstr "Doppio click per avviare il gioco, click destro per altre opzioni"
+
+#: e4mame.py:346
+msgid "Snapshot not available"
+msgstr "Schermata non disponibile"
+
+#: e4mame.py:378
+msgid "An error occurred while running the game:"
+msgstr "C'è stato un errore durante l'esecuzione del gioco:"
+
+#: e4mame.py:381
+msgid "The error message has been copied in the clipboard"
+msgstr "Questo messaggio di errore è stato copiato negli appunti"
+
+#: main.py:35
 msgid "A minimalistic MAME Frontend"
 msgstr "Un frontend per MAME minimalistico"
 
-#: e4mame.py:501
+#: main.py:44
 msgid "Released under the GPL-3.0 Licence"
 msgstr "Rilasciato sotto licenza GPL-3.0"
 
-#: e4mame.py:522
+#: main.py:70
 msgid "The games file does not exist. I will now create it."
 msgstr "Il file dei giochi non esiste. Lo creerò adesso."
 
-#: e4mame.py:523
+#: main.py:72
 msgid "Please confirm that your zip snap file is:"
 msgstr "Per favore conferma che il file zip delle schermate è:"
 
-#: e4mame.py:524
+#: main.py:75
 msgid "Please confirm that your mame executable is:"
 msgstr "Per favore conferma che l'eseguibile mame è:"
 
-#: e4mame.py:525
+#: main.py:79
 msgid "Y"
 msgstr "S"
 
-#: e4mame.py:525 e4mame.py:526
+#: main.py:79 main.py:80
 msgid "N"
 msgstr "N"
 
-#: e4mame.py:527
+#: main.py:81
 msgid "Please correct"
 msgstr "Per favore correggi"
 
-#: e4mame.py:535
+#: main.py:89
 msgid "All files have been update. Please restart the program"
 msgstr "Tutti i file sono stati aggiornati. Per favore riavvia il programma"
 
-#: e4mame.py:584
+#: main.py:140
 msgid "About"
 msgstr "Informazioni su"
 

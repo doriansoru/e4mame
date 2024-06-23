@@ -1,52 +1,17 @@
-import argparse
-import configparser
-import gettext
+from config import get_config, copy_config_files, _
+from const import APP_TITLE, MIN_WIDTH, MIN_HEIGHT, LBL_ADD_TO_FAVORITES, LBL_REMOVE_FROM_FAVORITES, LBL_LAUNCH, LBL_SEARCH, LBL_ALL_GAMES, LBL_FAVORITES, LBL_QUIT, FLD_DESCRIPTION
 import io
 import json
-import locale
 import os
-import pathlib
-import shutil
 import subprocess
 import sys
 import tkinter as tk
 import tkinter.constants as tkconst
 from tkinter import messagebox
 from tkinter import ttk, font
-import xml.etree.ElementTree as ET
 import zipfile
 from PIL import Image, ImageTk
-from platformdirs import user_config_dir
 import pyperclip
-
-# Sets the default locale
-locale.setlocale(locale.LC_ALL, "")
-# Gets the default encoding
-encoding = locale.getencoding()
-
-# Gets the default locale
-lang, _ = locale.getlocale()
-
-if lang:
-	g = gettext.translation("base", localedir="locales")
-	_ = g.gettext
-else:
-	gettext.install(True)
-
-APP_TITLE = _("E4 MAME Frontend")
-MIN_WIDTH = 600
-MIN_HEIGHT = 400
-
-LBL_ADD_TO_FAVORITES = _("Add to favorites")
-LBL_REMOVE_FROM_FAVORITES = _("Remove from favorites")
-LBL_LAUNCH = _("Launch")
-LBL_SEARCH = _("Type to search")
-LBL_ALL_GAMES = _("All games")
-LBL_FAVORITES = _("Favorites")
-LBL_QUIT = _("Quit")
-
-FLD_DESCRIPTION = "description"
-
 
 class E4Mame:
 	"""
@@ -73,7 +38,7 @@ class E4Mame:
 
 		self.config = get_config(True)
 		# Copy the config file
-		if not os.path.isdir(config["config_dir"]):
+		if not os.path.isdir(self.config["config_dir"]):
 			copy_config_files()
 			self.config = get_config(True)
 
@@ -194,7 +159,7 @@ class E4Mame:
 		except FileNotFoundError:
 			favorites = {}
 		except (PermissionError, IsADirectoryError) as e:
-			messagebox.showerror(_("Error"), str(e))
+			self.error(e, True)
 			favorites = {}
 		return favorites
 
@@ -222,6 +187,18 @@ class E4Mame:
 		self.favorites[selected_game] = self.games[selected_game]
 		self.save_favorites()
 
+	def error(self, message, terminate = False):
+		"""
+		Shows an error messagebox.
+		
+		:param message: The string of the message to show.
+		:param terminate: Terminate or not the program after the error.
+		"""
+		# Show a messagebox
+		messagebox.showerror(_("Error"), message)
+		if terminate:
+			sys.exit()
+		
 	def remove_favorite(self, selected_game):
 		"""
 		Remove a game from the favorites.
@@ -356,8 +333,7 @@ class E4Mame:
 				with zipfile.ZipFile(self.config["snap_file"], "r") as snaps:
 					img_data = snaps.read(game_image_name)
 			except (FileNotFoundError, PermissionError, zipfile.BadZipFile) as e:
-				
-				messagebox.showerror(_("Error"), str(e))
+				self.error(e, True)
 
 			self.game_image = Image.open(io.BytesIO(img_data))
 
@@ -395,7 +371,7 @@ class E4Mame:
 				check=False,
 			)
 		except (subprocess.CalledProcessError, FileNotFoundError) as e:
-			messagebox.showerror(_("Error"), str(e))
+			self.error(e)
 		
 		if result.stderr.decode() != "":
 			error_message = (
@@ -405,7 +381,7 @@ class E4Mame:
 				+ _("The error message has been copied in the clipboard")
 			)
 			pyperclip.copy(result.stderr.decode())
-			messagebox.showerror(_("Error"), error_message)
+			self.error(error_message)
 
 	def load_games(self):
 		"""
@@ -451,242 +427,3 @@ class E4Mame:
 			)
 
 		self.menu.tk_popup(event.x_root, event.y_root)
-
-
-def build_games(config, custom_xml=None):
-	"""
-	Build the working game list.
-
-	:param config: The configuration variables
-	:param custom_xml: A custom xml file instead of that one returned by mame -listxml.
-	"""
-
-	config = get_config(False)
-
-	print(_("Getting all your roms list..."))
-	if custom_xml is None:
-		command = [config['mame_executable'], "-listxml"]
-		process = subprocess.run(
-			command, stdout=subprocess.PIPE, check=False
-		)
-		xml_string = process.stdout.decode()
-	else:
-		with open(custom_xml, "r") as f:
-			xml_string = f.read()
-
-	try:
-		root = ET.fromstring(xml_string)
-	except ET.ParseError as e:
-		print(_("Error") + "\n\n" + str(e))
-
-	machines = root.findall("machine")
-	roms = [
-		machine.attrib["name"]
-		for machine in machines
-		if machine.attrib["isbios"] == "no"
-		and machine.find(".//driver") is not None
-		and machine.find(".//driver").attrib["status"] == "good"
-	]
-
-	# Remove empty strings from the list
-	games_list = [game for game in roms if game]
-
-	# Sort games
-	games_list.sort()
-
-	games = {}
-	n = len(games_list)
-	i = 1
-	snaps_list = []
-	with zipfile.ZipFile(config["snap_file"], "r") as snaps:
-		snaps_list = snaps.namelist()
-
-	for game in games_list:
-		print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
-		snap_name = f"{game}.png"
-		command = [config['mame_executable'], "-lx", game]
-		process = subprocess.Popen(command, stdout=subprocess.PIPE)
-		output, error = process.communicate()
-
-		# L'output sarà in bytes, quindi lo convertiamo in una stringa
-		xml_string = output.decode()
-
-		root = ET.fromstring(xml_string)
-		for machine in root.findall(f'.//machine[@name="{game}"]'):
-			description = machine.find(FLD_DESCRIPTION).text
-
-		snapshot = snap_name in snaps_list
-		games[game] = {FLD_DESCRIPTION: description, "snapshot": snapshot}
-		i += 1
-	print(_("Saving everything in") + " " + config["games_file"])
-	with open(config["games_file"], "w") as f:
-		json.dump(games, f, indent=4)
-
-
-def get_config(read_from_config_dir=False):
-	"""
-	Get the configuration variables.
-
-	:param read_from_config_dir: If True, read the config.ini file
-		   from user_config_dir(app_name), otherwise from the script directory.
-	"""
-
-	app_name = "e4mame"
-	config_file = "config.ini"
-	games_file = "games.json"
-	favorites_file = "favorites.json"
-	config_dir = user_config_dir(app_name)
-	config_dir_path = pathlib.Path(config_dir)
-
-	config = configparser.ConfigParser()
-	config.read(config_file)
-	rom_path = config["global"]["rom_path"]
-	snap_file = config["global"]["snap_file"]
-	mame_executable = config["global"]["mame_executable"]
-
-	config = {"config_file": config_file, 
-		"games_file": (config_dir_path / games_file) if read_from_config_dir else games_file,
-		"favorites_file": (config_dir_path / favorites_file) if read_from_config_dir else favorites_file,
-		"config_dir": config_dir,
-		"rom_path": rom_path,
-		"snap_file": snap_file,
-		"mame_executable": mame_executable,
-	}
-	return config
-
-
-def copy_config_files():
-	"""
-	Copy the configuration files to user_config_dir(app_name).
-	"""
-
-	config = get_config(False)
-	# Copy the config file
-	if not os.path.isdir(config["config_dir"]):
-		# Create the directory
-		os.makedirs(config["config_dir"], exist_ok=True)
-		shutil.copy(config["config_file"], config["config_dir"])
-		shutil.copy(config["games_file"], config["config_dir"])
-
-
-def get_about_notebook():
-	"""
-	Build and return the about notebook tab.
-	"""
-
-	# Adds an "About" notebook
-	pad1 = 30
-	pad2 = 20
-	about_notebook = ttk.Frame(notebook)
-	label_app_name = ttk.Label(about_notebook, text=APP_TITLE, font=font.Font(size=25))
-	label_app_description = ttk.Label(
-		about_notebook, text=_("A minimalistic MAME Frontend"), font=font.Font(size=16)
-	)
-	label_app_author = ttk.Label(
-		about_notebook,
-		text="by Dorian Soru, doriansoru@gmail.com",
-		font=font.Font(size=14),
-	)
-	label_license = ttk.Label(
-		about_notebook,
-		text=_("Released under the GPL-3.0 Licence"),
-		font=font.Font(size=14),
-	)
-
-	# Add the elements
-	label_app_name.pack(fill=tk.X, pady=(0, pad1))
-	label_app_description.pack(fill=tk.X, pady=(0, pad2))
-	label_app_author.pack(fill=tk.X, pady=(0, pad2))
-	label_license.pack(fill=tk.X, pady=(0, pad2))
-	return about_notebook
-
-
-if __name__ == "__main__":
-	# Parse arguments
-	parser = argparse.ArgumentParser(description=APP_TITLE)
-	parser.add_argument("-g", "--games", action="store_true", help="Build games list")
-	parser.add_argument(
-		"-x", "--xml", type=str, help="Path to your MAME custom XML file"
-	)
-	args = parser.parse_args()
-
-	# Get the config file from the current directory
-	config = get_config(False)
-
-	# Check if games_file exists or creates it
-	if not os.path.isfile(config["games_file"]):
-		print(_("The games file does not exist. I will now create it."))
-		print(
-			_("Please confirm that your zip snap file is:") + " " + config["snap_file"]
-		)
-		print(
-			_("Please confirm that your mame executable is:")
-			+ " "
-			+ config["mame_executable"]
-		)
-		confirm = input(_("Y") + " / " + _("N") + ": ").lower()
-		if confirm == _("N").lower():
-			print(_("Please correct") + " " + config["config_file"])
-			sys.exit()
-		else:
-			if args.xml is not None:
-				build_games(config, args.xml)
-			else:
-				build_games(config)
-			copy_config_files()
-			print(_("All files have been update. Please restart the program"))
-			sys.exit()
-
-	# Now user_config_dir(app_name) has been created and
-	# the config files have been copied. Re-read them from there
-	config = get_config(True)
-
-	# Appropriate actions for the various arguments
-	if args.games:
-		if args.xml is not None:
-			build_games(config, args.xml)
-		else:
-			build_games(config)
-	else:
-		# Creates the main window
-		window = tk.Tk()
-		window.title(APP_TITLE)
-
-		# Sets the minimum dimensions
-		window.minsize(MIN_WIDTH, MIN_HEIGHT)
-
-		# Creates an instance of ttk.Notebook
-		notebook = ttk.Notebook(window)
-		notebook.pack(fill=tk.BOTH, expand=1)
-
-		# Creates a frame for the first tab
-		all_games_frame = ttk.Frame(notebook)
-
-		# Creates an instance of MameFrontend for the first tab
-		all_games_frontend = E4Mame(
-			all_games_frame, config["games_file"], search=True, show_favorites=False
-		)
-
-		# Adds the first tab to the notebook
-		notebook.add(all_games_frame, text=LBL_ALL_GAMES)
-
-		# Creates a frame for the second tab
-		favorites_games_frame = ttk.Frame(notebook)
-
-		# Creates an instance of MameFrontend for the second tab
-		favorites_games_frontend = E4Mame(
-			favorites_games_frame,
-			config["favorites_file"],
-			search=True,
-			show_favorites=True,
-		)
-
-		# Adds the second tab to the notebook
-		notebook.add(favorites_games_frame, text=LBL_FAVORITES)
-
-		# Add the tab
-		notebook.add(get_about_notebook(), text=_("About"))
-
-		window.after_idle(lambda: all_games_frontend.select_first_game())
-		# Starts the main window
-		window.mainloop()
