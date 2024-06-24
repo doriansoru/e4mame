@@ -1,3 +1,4 @@
+from const import *
 import configparser
 import gettext
 import locale

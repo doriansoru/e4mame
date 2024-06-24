@@ -1,4 +1,15 @@
-from config import _
+import gettext
+import locale
+
+# Gets the default locale
+lang, _ = locale.getlocale()
+
+if lang:
+	g = gettext.translation("base", localedir="locales")
+	_ = g.gettext
+else:
+	gettext.install(True)
+	
 APP_TITLE = _("E4 MAME Frontend")
 MIN_WIDTH = 600
 MIN_HEIGHT = 400
