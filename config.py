@@ -1,4 +1,5 @@
 from const import *
+from i18n import _
 import configparser
 import gettext
 import locale
@@ -7,20 +8,6 @@ import subprocess
 import xml.etree.ElementTree as ET
 from platformdirs import user_config_dir
 import zipfile
-
-# Sets the default locale
-locale.setlocale(locale.LC_ALL, "")
-# Gets the default encoding
-encoding = locale.getencoding()
-
-# Gets the default locale
-lang, _ = locale.getlocale()
-
-if lang:
-	g = gettext.translation("base", localedir="locales")
-	_ = g.gettext
-else:
-	gettext.install(True)
 
 def get_config(read_from_config_dir=False):
 	"""

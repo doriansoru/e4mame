@@ -1,14 +1,4 @@
-import gettext
-import locale
-
-# Gets the default locale
-lang, _ = locale.getlocale()
-
-if lang:
-	g = gettext.translation("base", localedir="locales")
-	_ = g.gettext
-else:
-	gettext.install(True)
+from i18n import _
 	
 APP_TITLE = _("E4 MAME Frontend")
 MIN_WIDTH = 600
