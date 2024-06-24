@@ -1,7 +1,12 @@
 from const import *
 from i18n import _
 import configparser
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from functools import partial
+import json
+import os
 import pathlib
+import shutil
 import subprocess
 import xml.etree.ElementTree as ET
 from platformdirs import user_config_dir
@@ -50,6 +55,53 @@ def copy_config_files():
 		os.makedirs(config["config_dir"], exist_ok=True)
 		shutil.copy(config["config_file"], config["config_dir"])
 		shutil.copy(config["games_file"], config["config_dir"])
+
+def check_game(game, config, snaps_list):
+	"""
+	Checks if a game is functional by running the MAME executable and parsing the output.
+
+	:param game: The name of the game to check
+	:param config: The configuration variables
+	:param snaps_list: List of available snapshots
+	"""
+	snap_name = f"{game}.png"
+	command = [config['mame_executable'], "-lx", game]
+	process = subprocess.Popen(command, stdout=subprocess.PIPE)
+	output, error = process.communicate()
+
+	# The output will be in bytes, convert it to a string
+	xml_string = output.decode()
+
+	root = ET.fromstring(xml_string)
+	description = None
+	for machine in root.findall(f'.//machine[@name="{game}"]'):
+		description = machine.find(FLD_DESCRIPTION).text
+
+	snapshot = snap_name in snaps_list
+	return game, {FLD_DESCRIPTION: description, "snapshot": snapshot}
+
+def check_games(games_list, config, snaps_list):
+	"""
+	Checks multiple games for functionality using multiple cores.
+
+	:param games_list: List of game names to check
+	:param config: The configuration variables
+	:param snaps_list: List of available snapshots
+	"""	
+	games = {}
+	i = 1
+	n = len(games_list)
+
+	with ProcessPoolExecutor() as executor:
+		futures = {executor.submit(check_game, game, config, snaps_list): game for game in games_list}
+
+		for future in as_completed(futures):
+			game, result = future.result()
+			games[game] = result
+			print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
+			i += 1
+
+	return games	
 	
 def build_games(config, custom_xml=None):
 	"""
@@ -99,23 +151,25 @@ def build_games(config, custom_xml=None):
 	with zipfile.ZipFile(config["snap_file"], "r") as snaps:
 		snaps_list = snaps.namelist()
 
-	for game in games_list:
-		print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")	
-		snap_name = f"{game}.png"
-		command = [config['mame_executable'], "-lx", game]
-		process = subprocess.Popen(command, stdout=subprocess.PIPE)
-		output, error = process.communicate()
+	games = check_games(games_list, config, snaps_list)
+	
+	#for game in games_list:
+	#	print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")	
+	#	snap_name = f"{game}.png"
+	#	command = [config['mame_executable'], "-lx", game]
+	#	process = subprocess.Popen(command, stdout=subprocess.PIPE)
+	#	output, error = process.communicate()
 
 		# The output will be in bytes, convert it to a string
-		xml_string = output.decode()
+	#	xml_string = output.decode()
 
-		root = ET.fromstring(xml_string)
-		for machine in root.findall(f'.//machine[@name="{game}"]'):
-			description = machine.find(FLD_DESCRIPTION).text
+	#	root = ET.fromstring(xml_string)
+	#	for machine in root.findall(f'.//machine[@name="{game}"]'):
+	#		description = machine.find(FLD_DESCRIPTION).text
 
-		snapshot = snap_name in snaps_list
-		games[game] = {FLD_DESCRIPTION: description, "snapshot": snapshot}
-		i += 1
+	#	snapshot = snap_name in snaps_list
+	#	games[game] = {FLD_DESCRIPTION: description, "snapshot": snapshot}
+	#	i += 1
 		
 	print(_("Saving everything in") + " " + config["games_file"])
 	with open(config["games_file"], "w") as f:
