@@ -2,6 +2,7 @@ from config import get_config, copy_config_files, build_games, _
 from e4mame import E4Mame
 import argparse
 import os
+import subprocess
 import sys
 import tkinter as tk
 from tkinter import messagebox
