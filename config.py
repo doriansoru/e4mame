@@ -152,24 +152,6 @@ def build_games(config, custom_xml=None):
 		snaps_list = snaps.namelist()
 
 	games = check_games(games_list, config, snaps_list)
-	
-	#for game in games_list:
-	#	print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")	
-	#	snap_name = f"{game}.png"
-	#	command = [config['mame_executable'], "-lx", game]
-	#	process = subprocess.Popen(command, stdout=subprocess.PIPE)
-	#	output, error = process.communicate()
-
-		# The output will be in bytes, convert it to a string
-	#	xml_string = output.decode()
-
-	#	root = ET.fromstring(xml_string)
-	#	for machine in root.findall(f'.//machine[@name="{game}"]'):
-	#		description = machine.find(FLD_DESCRIPTION).text
-
-	#	snapshot = snap_name in snaps_list
-	#	games[game] = {FLD_DESCRIPTION: description, "snapshot": snapshot}
-	#	i += 1
 		
 	print(_("Saving everything in") + " " + config["games_file"])
 	with open(config["games_file"], "w") as f:
