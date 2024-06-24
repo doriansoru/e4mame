@@ -2,6 +2,7 @@ import configparser
 import gettext
 import locale
 import pathlib
+import subprocess
 import xml.etree.ElementTree as ET
 from platformdirs import user_config_dir
 
