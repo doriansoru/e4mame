@@ -50,7 +50,7 @@ def copy_config_files():
 		os.makedirs(config["config_dir"], exist_ok=True)
 		shutil.copy(config["config_file"], config["config_dir"])
 		shutil.copy(config["games_file"], config["config_dir"])
-
+	
 def build_games(config, custom_xml=None):
 	"""
 	Build the working game list.
@@ -100,13 +100,13 @@ def build_games(config, custom_xml=None):
 		snaps_list = snaps.namelist()
 
 	for game in games_list:
-		print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
+		print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")	
 		snap_name = f"{game}.png"
 		command = [config['mame_executable'], "-lx", game]
 		process = subprocess.Popen(command, stdout=subprocess.PIPE)
 		output, error = process.communicate()
 
-		# L'output sarà in bytes, quindi lo convertiamo in una stringa
+		# The output will be in bytes, convert it to a string
 		xml_string = output.decode()
 
 		root = ET.fromstring(xml_string)
@@ -116,6 +116,7 @@ def build_games(config, custom_xml=None):
 		snapshot = snap_name in snaps_list
 		games[game] = {FLD_DESCRIPTION: description, "snapshot": snapshot}
 		i += 1
+		
 	print(_("Saving everything in") + " " + config["games_file"])
 	with open(config["games_file"], "w") as f:
 		json.dump(games, f, indent=4)
