@@ -5,6 +5,7 @@ import pathlib
 import subprocess
 import xml.etree.ElementTree as ET
 from platformdirs import user_config_dir
+import zipfile
 
 # Sets the default locale
 locale.setlocale(locale.LC_ALL, "")

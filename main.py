@@ -7,6 +7,7 @@ import sys
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk, font
+import zipfile
 
 APP_TITLE = _("E4 MAME Frontend")
 MIN_WIDTH = 600
