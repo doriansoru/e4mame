@@ -5,6 +5,7 @@ import argparse
 import os
 import subprocess
 import sys
+import json
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk, font
