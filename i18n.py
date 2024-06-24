@@ -1,3 +1,6 @@
+import gettext
+import locale
+
 # Sets the default locale
 locale.setlocale(locale.LC_ALL, "")
 # Gets the default encoding

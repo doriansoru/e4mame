@@ -1,8 +1,6 @@
 from const import *
 from i18n import _
 import configparser
-import gettext
-import locale
 import pathlib
 import subprocess
 import xml.etree.ElementTree as ET
