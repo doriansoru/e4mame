@@ -21,7 +21,7 @@ from the program directory.
 ### Installing
 
 * On Unix systems type `make` to build a personalized config.ini file and to run `pip -r requirements.txt`.
-* Otherwise, modify `config.ini.sample` and rename it to `config.ini` and run yourself `pip -r requirements.txt`.
+* Otherwise, modify `config.ini.sample` and rename it to `config.ini` and run yourself `pip install -r requirements.txt`.
 
 ### Executing program
 
