@@ -1,5 +1,5 @@
 from config import get_config, copy_config_files, _
-from const import APP_TITLE, MIN_WIDTH, MIN_HEIGHT, LBL_ADD_TO_FAVORITES, LBL_REMOVE_FROM_FAVORITES, LBL_LAUNCH, LBL_SEARCH, LBL_ALL_GAMES, LBL_FAVORITES, LBL_QUIT, FLD_DESCRIPTION
+from const import APP_TITLE, MIN_WIDTH, MIN_HEIGHT, LBL_ADD_TO_FAVORITES, LBL_REMOVE_FROM_FAVORITES, LBL_LAUNCH, LBL_SEARCH, LBL_ALL_GAMES, LBL_FAVORITES, LBL_QUIT, FLD_DESCRIPTION, ALL_GAMES_FRONTEND, FAVORITES_GAMES_FRONTEND
 import io
 import json
 import os
@@ -18,7 +18,7 @@ class E4Mame:
 	Class that handles the graphical interface of the MAME frontend.
 	"""
 
-	def __init__(self, window, source, search=True, show_favorites=False):
+	def __init__(self, window, source, search=True, show_favorites=False, manager = None):
 		"""
 		Initialize the E4Mame class.
 
@@ -26,9 +26,11 @@ class E4Mame:
 		:param source: The path to the JSON file that contains the games list.
 		:param search: Boolean that indicates if the search bar should be displayed.
 		:param show_favorites: Boolean that indicates if the favorites games should be displayed.
+		:param manager: A reference to the E4MameManager class for all instances of this class.
 		"""
 
 		self.window = window
+		self.manager = manager
 		self.window.bind("<Configure>", self.on_window_resize)
 
 		self.source = source
@@ -167,6 +169,7 @@ class E4Mame:
 		"""
 		Save the favorites games to the JSON file.
 		"""
+		
 		# Saves the favorites
 		with open(self.config["favorites_file"], "w") as f:
 			json.dump(self.favorites, f)
@@ -174,7 +177,9 @@ class E4Mame:
 		self.favorites = self.load_favorites()
 
 		# Updates the list in the second tab
-		if favorites_games_frontend:
+		favorites_games_frontend = self.manager.get_instance(FAVORITES_GAMES_FRONTEND)
+		
+		if favorites_games_frontend is not None:
 			favorites_games_frontend.load_games()
 
 	def add_favorite(self, selected_game):

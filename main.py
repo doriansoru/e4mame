@@ -1,5 +1,7 @@
 from i18n import _
 from config import get_config, copy_config_files, build_games
+from const import ALL_GAMES_FRONTEND, FAVORITES_GAMES_FRONTEND
+from e4mamemanager import E4MameManager
 from e4mame import E4Mame
 import argparse
 import os
@@ -118,10 +120,14 @@ if __name__ == "__main__":
 		# Creates a frame for the first tab
 		all_games_frame = ttk.Frame(notebook)
 
+		manager = E4MameManager()
+		
 		# Creates an instance of MameFrontend for the first tab
 		all_games_frontend = E4Mame(
-			all_games_frame, config["games_file"], search=True, show_favorites=False
+			all_games_frame, config["games_file"], search=True, show_favorites=False, manager = manager
 		)
+		
+		manager.add_instance(ALL_GAMES_FRONTEND, all_games_frontend)
 
 		# Adds the first tab to the notebook
 		notebook.add(all_games_frame, text=LBL_ALL_GAMES)
@@ -135,7 +141,10 @@ if __name__ == "__main__":
 			config["favorites_file"],
 			search=True,
 			show_favorites=True,
+			manager = manager
 		)
+
+		manager.add_instance(FAVORITES_GAMES_FRONTEND, favorites_games_frontend)
 
 		# Adds the second tab to the notebook
 		notebook.add(favorites_games_frame, text=LBL_FAVORITES)

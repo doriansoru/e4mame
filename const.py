@@ -13,3 +13,7 @@ LBL_FAVORITES = _("Favorites")
 LBL_QUIT = _("Quit")
 
 FLD_DESCRIPTION = "description"
+
+ALL_GAMES_FRONTEND = 'all_games_frontend'
+
+FAVORITES_GAMES_FRONTEND = 'favorites_games_frontend'
