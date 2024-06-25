@@ -11,11 +11,12 @@ I needed a minimalistic MAME Frontend and, after searching for a while, I decide
 
 ### Dependencies
 Dependencies can be installed by running
-```pip -r requirements.txt```
+```pip install -r requirements.txt```
 from the program directory.
 
 * Pillow for resizing the snapshot images.
 * Plaformdirs to get the current user config directory.
+* Pyperclip to automatically copy error messages on the clipboard.
 
 ### Installing
 
