@@ -22,3 +22,12 @@ class E4MameManager:
 		:param name: The name of the instance.
 		"""
 		return self.instances.get(name, None)
+
+	def remove_instance(self, name):
+		"""
+		Remove an instance from the manager.
+		
+		:param name: The name of the instance.
+		"""
+		if name in self.instances:
+			del self.instances[name]
