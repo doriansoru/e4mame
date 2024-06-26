@@ -90,12 +90,12 @@ def check_games_work(games_list, config):
 			works, game = future.result()
 			if works:
 				games.append(game)
-			print(_("Checking if it works for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
+			print(_("Checking if the following game works: n.") + " " + str(i) + " / " + str(n) + ": " + game + "...")
 			i += 1
 
 	return games
 
-def check_game(game, config, snaps_list):
+def check_game_description_and_snapshot(game, config, snaps_list):
 	"""
 	Checks the game details by running the MAME executable and parsing the output.
 
@@ -120,9 +120,9 @@ def check_game(game, config, snaps_list):
 	snapshot = snap_name in snaps_list
 	return game, {FLD_DESCRIPTION: description, "snapshot": snapshot}
 
-def check_games(games_list, config, snaps_list):
+def check_games_descriptions_and_snapshopts(games_list, config, snaps_list):
 	"""
-	Checks multiple games for functionality using multiple cores.
+	Checks multiple games for their descriptions and snapshots.
 
 	:param games_list: List of game names to check
 	:param config: The configuration variables
@@ -133,12 +133,12 @@ def check_games(games_list, config, snaps_list):
 	n = len(games_list)
 
 	with ProcessPoolExecutor() as executor:
-		futures = {executor.submit(check_game, game, config, snaps_list): game for game in games_list}
+		futures = {executor.submit(check_game_description_and_snapshot, game, config, snaps_list): game for game in games_list}
 
 		for future in as_completed(futures):
 			game, result = future.result()
 			games[game] = result
-			print(_("Getting the description and checking the snapshot for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
+			print(_("Getting the description and checking the snapshot for the following game: n.") + " " + str(i) + " / " + str(n) + ": " + game + "...")
 			i += 1
 
 	return games	
@@ -194,7 +194,7 @@ def build_games(config, custom_xml=None):
 	with zipfile.ZipFile(config["snap_file"], "r") as snaps:
 		snaps_list = snaps.namelist()
 
-	games = check_games(games_list, config, snaps_list)
+	games = check_games_descriptions_and_snapshopts(games_list, config, snaps_list)
 		
 	print(_("Saving everything in") + " " + config["games_file"])
 	with open(config["games_file"], "w") as f:
