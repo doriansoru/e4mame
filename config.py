@@ -90,7 +90,7 @@ def check_games_work(games_list, config):
 			works, game = future.result()
 			if works:
 				games.append(game)
-			print(_("Checking if the following game works: n.") + " " + str(i) + " / " + str(n) + ": " + game + "...")
+			print(_("Checking if the following game works: n.") + " " + str(i) + " / " + str(n) + ", " + game + "...")
 			i += 1
 
 	return games
@@ -138,7 +138,7 @@ def check_games_descriptions_and_snapshopts(games_list, config, snaps_list):
 		for future in as_completed(futures):
 			game, result = future.result()
 			games[game] = result
-			print(_("Getting the description and checking the snapshot for the following game: n.") + " " + str(i) + " / " + str(n) + ": " + game + "...")
+			print(_("Getting the description and checking the snapshot for the following game: n.") + " " + str(i) + " / " + str(n) + ", " + game + "...")
 			i += 1
 
 	return games	
