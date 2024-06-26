@@ -181,12 +181,12 @@ def build_games(config, custom_xml=None):
 	# Remove empty strings and non existent zip files for romsfrom the list
 	games_list = [ game for game in roms if game and (pathlib.Path(config['rom_path']) / f"{game}.zip").is_file() ]
 
-	# Keep only working games
-	games_list = check_games_work(games_list, config)
-
 	# Sort games
 	games_list.sort()
 
+	# Keep only working games
+	games_list = check_games_work(games_list, config)
+	
 	games = {}
 	n = len(games_list)
 	i = 1
