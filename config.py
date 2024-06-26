@@ -138,8 +138,8 @@ def build_games(config, custom_xml=None):
 		and machine.find(".//driver").attrib["status"] == "good"
 	]
 
-	# Remove empty strings from the list
-	games_list = [game for game in roms if game]
+	# Remove empty strings and non existent zip files for romsfrom the list
+	games_list = [ game for game in roms if game and (pathlib.Path(config['rom_path']) / f"{game}.zip").is_file() ]
 
 	# Sort games
 	games_list.sort()
