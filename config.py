@@ -56,14 +56,54 @@ def copy_config_files():
 		shutil.copy(config["config_file"], config["config_dir"])
 		shutil.copy(config["games_file"], config["config_dir"])
 
+def check_game_works(game, config):
+	"""
+	Checks if a game works by the MAME executable and parsing the output.
+
+	:param game: The name of the game to check
+	:param config: The configuration variables
+	"""
+
+	snap_name = f"{game}.png"
+	command = [config['mame_executable'], "-verifyroms", game]
+	result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	works = result.stderr == ''
+	return works, game
+
+
+def check_games_work(games_list, config):
+	"""
+	Checks multiple games for functionality using multiple cores.
+
+	:param games_list: List of game names to check
+	:param config: The configuration variables
+	:param snaps_list: List of available snapshots
+	"""	
+	games = []
+	i = 1
+	n = len(games_list)
+
+	with ProcessPoolExecutor() as executor:
+		futures = {executor.submit(check_game_works, game, config): game for game in games_list}
+
+		for future in as_completed(futures):
+			works, game = future.result()
+			if works:
+				games.append(game)
+			print(_("Checking if it works for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
+			i += 1
+
+	return games
+
 def check_game(game, config, snaps_list):
 	"""
-	Checks if a game is functional by running the MAME executable and parsing the output.
+	Checks the game details by running the MAME executable and parsing the output.
 
 	:param game: The name of the game to check
 	:param config: The configuration variables
 	:param snaps_list: List of available snapshots
 	"""
+
 	snap_name = f"{game}.png"
 	command = [config['mame_executable'], "-lx", game]
 	process = subprocess.Popen(command, stdout=subprocess.PIPE)
@@ -98,7 +138,7 @@ def check_games(games_list, config, snaps_list):
 		for future in as_completed(futures):
 			game, result = future.result()
 			games[game] = result
-			print(_("Checking for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
+			print(_("Getting the description and checking the snapshot for") + " " + str(i) + " / " + str(n) + ": " + game + "...")
 			i += 1
 
 	return games	
@@ -140,6 +180,9 @@ def build_games(config, custom_xml=None):
 
 	# Remove empty strings and non existent zip files for romsfrom the list
 	games_list = [ game for game in roms if game and (pathlib.Path(config['rom_path']) / f"{game}.zip").is_file() ]
+
+	# Keep only working games
+	games_list = check_games_work(games_list, config)
 
 	# Sort games
 	games_list.sort()

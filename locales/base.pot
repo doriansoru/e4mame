@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 09:19+0200\n"
+"POT-Creation-Date: 2024-06-26 16:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,106 +17,110 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: config.py:76
+#: config.py:93
+msgid "Checking if it works for"
+msgstr ""
+
+#: config.py:141
+msgid "Getting the description and checking the snapshot for"
+msgstr ""
+
+#: config.py:156
 msgid "Getting all your roms list..."
 msgstr ""
 
-#: config.py:90 e4mame.py:198
+#: config.py:170 e4mame.py:203
 msgid "Error"
 msgstr ""
 
-#: config.py:115
-msgid "Checking for"
-msgstr ""
-
-#: config.py:131
+#: config.py:199
 msgid "Saving everything in"
 msgstr ""
 
-#: const.py:2 main.py:10
+#: const.py:3 main.py:16
 msgid "E4 MAME Frontend"
 msgstr ""
 
-#: const.py:6 main.py:14
+#: const.py:7 main.py:20
 msgid "Add to favorites"
 msgstr ""
 
-#: const.py:7 main.py:15
+#: const.py:8 main.py:21
 msgid "Remove from favorites"
 msgstr ""
 
-#: const.py:8 main.py:16
+#: const.py:9 main.py:22
 msgid "Launch"
 msgstr ""
 
-#: const.py:9 main.py:17
+#: const.py:10 main.py:23
 msgid "Type to search"
 msgstr ""
 
-#: const.py:10 main.py:18
+#: const.py:11 main.py:24
 msgid "All games"
 msgstr ""
 
-#: const.py:11 main.py:19
+#: const.py:12 main.py:25
 msgid "Favorites"
 msgstr ""
 
-#: const.py:12 main.py:20
+#: const.py:13 main.py:26
 msgid "Quit"
 msgstr ""
 
-#: e4mame.py:58
+#: e4mame.py:60
 msgid "Double click to launch the game, right click for more options"
 msgstr ""
 
-#: e4mame.py:346
+#: e4mame.py:351
 msgid "Snapshot not available"
 msgstr ""
 
-#: e4mame.py:378
+#: e4mame.py:383
 msgid "An error occurred while running the game:"
 msgstr ""
 
-#: e4mame.py:381
+#: e4mame.py:386
 msgid "The error message has been copied in the clipboard"
 msgstr ""
 
-#: main.py:35
+#: main.py:41
 msgid "A minimalistic MAME Frontend"
 msgstr ""
 
-#: main.py:44
+#: main.py:50
 msgid "Released under the GPL-3.0 Licence"
 msgstr ""
 
-#: main.py:70
+#: main.py:76
 msgid "The games file does not exist. I will now create it."
 msgstr ""
 
-#: main.py:72
+#: main.py:78
 msgid "Please confirm that your zip snap file is:"
 msgstr ""
 
-#: main.py:75
+#: main.py:81
 msgid "Please confirm that your mame executable is:"
 msgstr ""
 
-#: main.py:79
+#: main.py:85
 msgid "Y"
 msgstr ""
 
-#: main.py:79 main.py:80
+#: main.py:85 main.py:86
 msgid "N"
 msgstr ""
 
-#: main.py:81
+#: main.py:87
 msgid "Please correct"
 msgstr ""
 
-#: main.py:89
+#: main.py:95
 msgid "All files have been update. Please restart the program"
 msgstr ""
 
-#: main.py:140
+#: main.py:153
 msgid "About"
 msgstr ""
