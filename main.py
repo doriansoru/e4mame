@@ -1,3 +1,4 @@
+#!/bin/env python3
 from i18n import _
 from config import get_config, copy_config_files, build_games
 from const import ALL_GAMES_FRONTEND, FAVORITES_GAMES_FRONTEND

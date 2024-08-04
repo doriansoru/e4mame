@@ -175,7 +175,7 @@ def build_games(config, custom_xml=None):
 		for machine in machines
 		if machine.attrib["isbios"] == "no"
 		and machine.find(".//driver") is not None
-		and machine.find(".//driver").attrib["status"] == "good"
+		and machine.find(".//driver").attrib["emulation"] == "good"
 	]
 
 	# Remove empty strings and non existent zip files for romsfrom the list
